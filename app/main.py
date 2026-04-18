@@ -26,9 +26,13 @@ if ForwardRef is not None:
 
 from fastapi import FastAPI
 from app.routes.sprint_routes import router as sprint_router
+from app.mcp_server import mcp as _mcp_server
 
 app = FastAPI(title="NEXA Sprint Planner Agent")
 app.include_router(sprint_router, prefix="/api/sprint", tags=["Sprint Planner"])
+
+# Mount MCP server alongside existing REST routes (Streamable HTTP at /mcp)
+app.mount("/mcp", _mcp_server.get_asgi_app())
 
 @app.get("/")
 async def root():
