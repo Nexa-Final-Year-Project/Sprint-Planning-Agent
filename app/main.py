@@ -32,7 +32,15 @@ app = FastAPI(title="NEXA Sprint Planner Agent")
 app.include_router(sprint_router, prefix="/api/sprint", tags=["Sprint Planner"])
 
 # Mount MCP server alongside existing REST routes (Streamable HTTP at /mcp)
-app.mount("/mcp", _mcp_server.get_asgi_app())
+try:
+    if hasattr(_mcp_server, 'get_asgi_app'):
+        app.mount("/mcp", _mcp_server.get_asgi_app())
+    elif hasattr(_mcp_server, 'asgi_app'):
+        app.mount("/mcp", _mcp_server.asgi_app)
+    else:
+        print("[WARN] MCP server could not be mounted — REST endpoints will still work")
+except Exception as e:
+    print(f"[WARN] MCP mount failed ({e}) — REST endpoints will still work")
 
 @app.get("/")
 async def root():
