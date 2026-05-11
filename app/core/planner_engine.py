@@ -68,9 +68,6 @@ def _days_until(date_obj: Optional[date], from_date: date) -> Optional[int]:
         return None
     return (date_obj - from_date).days
 
-# ------------------------------------------------------
-# THE SMART AGILE SPRINT PLANNER AGENT
-# ------------------------------------------------------
 class SprintPlanner:
     
     def __init__(self, project_id: str, members: List[ProjectMember], tasks: List[Task], sprint_config: Dict[str, Any], max_tasks_per_member: Optional[int] = None):
